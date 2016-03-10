@@ -27,8 +27,12 @@ class spider(object):
 
     #获取网页内容
     def getPage(self):
-        headers = {'user-agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.87 Safari/537.36'}
-        return requests.get(self.url,headers = headers).text
+        try:
+            headers = {'user-agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.87 Safari/537.36'}
+            return requests.get(self.url,headers = headers).text
+        except requests.exceptions.ConnectionError:
+            print('请确认网址是否能够正常访问！！')
+
 
     #获取页面中所有的img标签
     def getImgTag(self):
@@ -68,5 +72,5 @@ class spider(object):
 
 
 
-spiderDemo = spider('https://movie.douban.com','../demo/images')
+spiderDemo = spider('https://www.zhihu.com/topic/19551137','../demo/images')
 spiderDemo.downloadImg()
