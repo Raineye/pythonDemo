@@ -13,16 +13,16 @@ class spider(object):
         self.imgUrlRule = '"https://[^"]+"'
 
     # 创建目录
-    def mkdir(self):
-        isExists=os.path.exists(self.localPath)
+    def mkdir(self,path):
+        isExists=os.path.exists(path)
         # 如果不存在则创建目录
         if not isExists:
-            os.makedirs(self.localPath)
-            print('目录已创建')
+            os.makedirs(path)
+            print('目录已创建:'+path)
             return True
         # 如果目录存在则不创建，并提示目录已存在
         else:
-            print('目录已存在')
+            # print('目录已存在'+path)
             return False
 
     #获取网页内容
@@ -53,10 +53,15 @@ class spider(object):
 
     #下载图片
     def downloadImg(self):
-        self.mkdir()
+        self.mkdir(self.localPath)
         print(self.localPath)
         for imgUrl in self.getImgUrl():
-            urllib.request.urlretrieve(imgUrl,filename=self.localPath+'/'+self.randomStr()+imgUrl[-4::])
+            pattern = re.compile('[A-Za-z]*$',re.S)
+            fileType = re.findall(pattern,imgUrl)[0]
+            filename = self.localPath+'/'+fileType
+            self.mkdir(filename)
+            filename = filename+'/'+self.randomStr()+'.'+fileType
+            urllib.request.urlretrieve(imgUrl,filename)
             print('downloads:'+imgUrl)
         return True
 
